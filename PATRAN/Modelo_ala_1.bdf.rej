@@ -1,0 +1,147 @@
+$REJECT (SEMTRN)  IGNORE INPUT CARD(S) BEFORE BEGIN BULK 
+SOL           103
+$>NASTRAN SYSTEM (359) = 0 
+NASTRAN  SYSTEM(316)=5 SYSTEM(357)=0 SYSTEM(732)=1 
+SOL           103
+$REJECT (SEMTRN)  CASE CONTROL CARD(S) AFTER  CEND 
+$
+$------------------Case control Deck------------------------------------------------------$
+$
+$>TITLE               = MODOS PROPIOS ALA
+$
+$es la informacion que aparecera en el archivo de resultados del bulk data, none es para que la info sea la minima
+$>SEALL               = ALL
+$aqui hay que poner siempre all
+$>SPC                 = 100
+$este es el id de la tarjeta spcadd que va al final
+$>METHOD              = 200
+$ este id ira en la tarjeta de calculo de autovalores
+$>RESVEC              = NO
+$
+$
+$ definicion de PARAMETROS y archivos de salida (que saque el hdf5 es importante)
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...
+$>MDLPRM  HDF5    0
+$PRTMAXIM controls the printout of the maximums of applied loads, single-point forces of constraint, multipoint forces of constraint, and displacements.
+$>PARAM   POST    -1
+$GRDPNT=0 coge el sistema de referencia basico pata definir masa y momentos de inercia
+$>PARAM   USETSEL 128
+$USETPRT controls the tabular printout of the degree-of-freedom sets
+$>PARAM   USETPRT 10
+$
+$
+$-------------------------------------------------------------------------------------------------------
+$>BEGIN BULK
+$REJECT (SEMTRN)  IGNORE INPUT CARD(S) AFTER  BEGIN BULK 
+$-------------------------------------------------------------------------------------------------------
+$
+$ configuracion del analisis de modos propios
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...
+$>EIGRL   200     0.0     150.0    15      0                       MASS
+$----------------------------------------------------------------------------------------------------
+$------------------ DEFINICION GEOMETRIA-------------------------------------------------------------
+$----------------------------------------------------------------------------------------------------
+$NODOS DEL EJE ELASTICO DEL ALA  
+$(10XX SON LOS NODOS ORIGINALES;11XX SON LOS NODOS REFINADOS Y 12XX SON NODOS DUPLICADOS)
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...
+$       ID              X       Y       Z               CONSTRAINS
+$>GRID    1001            0.      0.      0.              
+$	
+$>GRID    1101            0.      0.25    0.              
+$              
+$>GRID   	1202            0.      0.5     0.		
+$	
+$NODOS DEL BORDE DE ATAQUE DEL ALA
+$(20XX SON LOS NODOS ORIGINALES;21XX SON LOS NODOS REFINADOS Y 22XX SON NODOS DUPLICADOS)
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...
+$       ID              X       Y       Z               CONSTRAINS
+$>GRID    2001            -0.5    0.      0.              
+$	
+$>GRID    2101            -0.5    0.25    0.              
+$
+$>GRID   	2202            -0.5    0.5     0.		
+$
+$NODOS DEL BORDE DE SALIDA DEL ALA
+$(30XX SON LOS NODOS ORIGINALES;31XX SON LOS NODOS REFINADOS Y 32XX SON NODOS DUPLICADOS)
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...
+$       ID              X       Y       Z               CONSTRAINS
+$>GRID    3001            +0.5    0.      0.              
+$	
+$>GRID    3101            +0.5    0.25    0.              
+$
+$>GRID   	3202            +0.5    0.5     0.		
+$ELEMENTOS RBE2 DE UNIÓN DE NODOS
+$SE NOMBRAN CON ID 100XX
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...|
+$ELEM   ID      NODOIND GDL     NDEP1   NDEP2   NDEP3   ....
+$>RBE2    10001   1001    123456  1101    2101    3101    1202    2202    
+$
+$UNION RIGIDA DE NODOS DEL EJE ELASTICO (SE NOMBRAN CON ID 201XX)
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...
+$TARJ   ID      GA      GB      CB 
+$>RJOINT  21202   1202    1002    1236
+$
+$MUELLES A FLEXIÓN ALREDEDOR EJE X DEL ALA (ID71XXX)
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...
+$TARJ   ID      EI      NODO 1  COMPNEN NODO 2  COMPNEN
+$>CELAS2  71001   3.2+06  1202    4       1002    4
+$
+$MUELLES A TORSION ALREDEDOR EJE Y DEL ALA (ID 72XXX)
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...|
+$TARJ   ID      GJ      NODO1   GDL     NODO2   GDL  
+$>CELAS2  72001   3.37+06 1202    5       1002    5
+$
+$ MASAS PUNTUALES DEL BORDE DE ATAQUE (ID 92XXX)
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...
+$       ID      NODO            MASA
+$>CONM2   92001   2001            100.000
+$
+$MASAS PUNTUALES DEL BORDE DE SALIDA (93XXX)
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...
+$        ID      NODO            MASA
+$>CONM2    93001   3001            100.00
+$-------------------------------------------------------------------------------------------------
+$----------DEFINICION DE CONDICIONES DE CONTORNO
+$-------------------------------------------------------------------------------------------------
+$CONJUNTO DE CONDICIONES DE CONTORNO
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...
+$>SPCADD  100     5001       
+$CONDICION DE CONTORNO DE EMPOTRAMIENTO
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...
+$>SPC1    5001    123456  1001    2001    3001
+$ -------------------------------------------------------------------------------
+$--------------------------------------------------------------------------------------------------
+$----------------------PLOTEL---------------------------------------------------------------------
+$--------------------------------------------------------------------------------------------------
+$PLOTEL NODOS EJE ELASTICO (ID 30XXX)
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...
+$TARJ   ID      NODO 1  NODO2
+$>PLOTEL  30000   1001    1202
+$PLOTEL NODOS EJE ELASTICO AL BORDE DE ATAQUE(ID 31XXX)
+$NODOS DUPLICADOS
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...
+$TARJ   ID      NODO 1  NODO2
+$>PLOTEL  31000   1202    2202
+$NODOS ORIGINALES
+$>PLOTEL  31009   1002    2002
+$
+$PLOTEL NODOS EJE ELASTICO AL BORDE DE SALIDA(ID 32XXX)
+$NODOS DUPLICADOS
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...
+$TARJ   ID      NODO 1  NODO2
+$>PLOTEL  32000   1202    3202
+$NODOS ORIGINALES
+$>PLOTEL  32009   1002    3002
+$
+$PLOTEL NODOS BODE DE ATAQUE(ID 33XXX)
+$NODOS ORIGINAL A DUPLICADO
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...
+$TARJ   ID      NODO 1  NODO2
+$>PLOTEL  33000   2001    2202
+$
+$PLOTEL NODOS BODE DE SALIDA(ID 34XXX)
+$NODOS ORIGINAL A DUPLICADO
+$...1...|...2...|...3...|...4...|...5...|...6...|...7...|...8...|...9...|..10...
+$TARJ   ID      NODO 1  NODO2
+$>PLOTEL  34000   3001    3202
+

@@ -1,0 +1,40 @@
+$# Creating journal file C:\GitHub\AEAV_29\PATRAN\Trabajo_29.db.jou at 
+$# 12-Apr-21 16:00:43
+uil_file_rebuild.start("C:\Program Files\MSC.Software\NaPa_SE\2019fp1\Patr" // @
+"an/template.db","C:\GitHub\AEAV_29\PATRAN\Trabajo_29.db")
+$# Synchronizing the User Data Manager
+set_current_dir( "C:\GitHub\AEAV_29\PATRAN" )
+$# The current working directory has been changed to the database location 
+$# shown.                                                                     
+$#                                                                            
+$#                                   
+nastran_input_import( "C:\GitHub\AEAV_29\BDF_s\Modelo_ala_1.bdf",  @
+"default_group", 11, [TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE,  @
+TRUE, TRUE], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, @
+ 0], [-2000000000, -2000000000, -2000000000, -2000000000, -2000000000,  @
+-2000000000, -2000000000, -2000000000, 0, 0, 0] )
+$# Loading dynamic library C:\Program 
+$# Files\MSC.Software\NaPa_SE\2019fp1\Patran\bin\exe\nifimp.dll
+$# Creating Nastran Database using SOL nifimp_v22: Success
+$# Importing data...
+$# 90 Nodes written to database.
+$# 124 Elements written to database.
+$# 19 MPCs written to database.
+$# 2 Executive Control lines/comments written to database.
+$# 28 Case Control lines/comments written to database.
+$# 87 unrecognized Bulk Data lines/comments written to database.
+$# 117 total unrecognized entities/comment lines written to database.
+$# 1 Load Cases written to database.
+$# 1 Load Sets of type "spc1" written to database.
+$# Reading of MSC.Nastran input file completed.
+ga_view_aa_set( -1.000000, 0.000000, 0.000000 )
+ga_view_aa_set( 7.914643, 43.187580, -43.646008 )
+ga_view_aa_set( 0., 0., 0. )
+ga_view_aa_set( 90., 0., 0. )
+ga_view_aa_set( 0., 180., 0. )
+ga_view_aa_set( 180., 90., 180. )
+ga_view_aa_set( -90., 0., 0. )
+ga_view_aa_set( 90., 0., 0. )
+ga_view_aa_set( 0., 180., 0. )
+$# Flushing the User Data Manager
+$# Journal file stopped recording at 12-Apr-21 16:02:31
